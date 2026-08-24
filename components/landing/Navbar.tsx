@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/content";
-import { PrimaryCta } from "./CtaButton";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -56,10 +55,6 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
-          <PrimaryCta className="px-5 py-2.5 text-sm" />
-        </div>
-
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
@@ -84,7 +79,6 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <PrimaryCta className="mt-3 w-full" />
           </nav>
         </div>
       ) : null}
