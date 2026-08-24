@@ -3,17 +3,36 @@ import { ArrowLeft, ArrowUpRight, CalendarClock, Lock } from "lucide-react";
 import { listSpeakerSlots } from "@/lib/speakers";
 import { formatSlotDateParts, formatSlotTimeRange } from "@/lib/format-date";
 import { SectionHeading } from "@/components/landing/SectionHeading";
+import { JsonLd } from "@/components/JsonLd";
+import { DATES, SITE } from "@/lib/content";
 
 // Slot status is toggled manually in Supabase (open/closed), so this page
 // needs to pick up changes without a redeploy — revalidate periodically
 // instead of freezing the build-time snapshot forever.
 export const revalidate = 60;
 
+// Lighter than the home page's Course + Event pair: just enough for search
+// engines to place this listing under the main program.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Call for speakers: Azure Bootcamp",
+  description:
+    "Postula como speaker para una de las 12 sesiones del Azure Bootcamp by LEAD UTP.",
+  url: `${SITE.url}/aplicar`,
+  isPartOf: {
+    "@type": "Course",
+    name: `${SITE.name} by ${SITE.organizer}`,
+    url: SITE.url,
+  },
+};
+
 export default async function AplicarPage() {
   const slots = await listSpeakerSlots();
 
   return (
     <section className="relative overflow-hidden pb-16 pt-12 sm:pb-20 sm:pt-20 lg:pb-24">
+      <JsonLd data={jsonLd} />
       <div className="mx-auto max-w-6xl px-6">
         <Link
           href="/"
@@ -28,7 +47,50 @@ export default async function AplicarPage() {
             align="left"
             eyebrow="Convocatoria abierta"
             title="Call for speakers: Azure Bootcamp"
-            description="Buscamos speakers con experiencia real usando Microsoft Azure: profesionales que operan recursos en la nube y pueden guiar un laboratorio en vivo. Un ponente distinto para cada una de las 12 sesiones. No importa si es tu primera vez en un escenario o si ya has compartido antes: postula a la fecha que más te acomode."
+            description={
+              <>
+                <p>¿Trabajas con Microsoft Azure y quieres compartir tu experiencia?</p>
+                <p className="mt-3">
+                  Buscamos profesionales con{" "}
+                  <strong className="font-semibold text-white">
+                    experiencia real en Azure
+                  </strong>{" "}
+                  para liderar una sesión del Azure Bootcamp y ayudar a estudiantes de
+                  últimos ciclos y egresados recientes a llevar la teoría a la práctica.
+                </p>
+
+                <ul className="mt-4 flex flex-col gap-1.5">
+                  <li>
+                    🎤{" "}
+                    <strong className="font-semibold text-white">
+                      Tu participación:
+                    </strong>{" "}
+                    una sesión virtual de 2 horas
+                  </li>
+                  <li>
+                    🧠 <strong className="font-semibold text-white">1 hora:</strong>{" "}
+                    conceptos y experiencia aplicada
+                  </li>
+                  <li>
+                    💻 <strong className="font-semibold text-white">1 hora:</strong>{" "}
+                    laboratorio guiado en vivo
+                  </li>
+                  <li>
+                    📅{" "}
+                    <strong className="font-semibold text-white">12 sesiones:</strong>{" "}
+                    del {DATES.classesStart} al {DATES.classesEnd} de 2026
+                  </li>
+                </ul>
+
+                <p className="mt-4">
+                  Puedes postular a{" "}
+                  <strong className="font-semibold text-white">
+                    una o más sesiones
+                  </strong>
+                  , según tu experiencia y disponibilidad.
+                </p>
+              </>
+            }
           />
         </div>
 

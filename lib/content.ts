@@ -10,9 +10,24 @@ export const SITE = {
   tagline: "De principiante a experto",
   organizer: "LEAD UTP",
   pillar: "Pilar de Excelencia Académica",
-  url: "https://azurebootcamp.leadutp.org",
+  // Dominio real de despliegue (Vercel). Todas las URLs absolutas (OG,
+  // canonical, sitemap, JSON-LD) se derivan de este valor: si el proyecto
+  // se muda a un dominio propio, este es el único lugar que hay que tocar.
+  url: "https://azure-bootcamp.vercel.app",
   description:
     "Aprende Microsoft Azure gratis y en seis semanas: 100% virtual, un proyecto propio desplegado en la nube y una clausura presencial ante la industria.",
+};
+
+// Imagen compartida para WhatsApp, LinkedIn, Threads y X (Open Graph +
+// Twitter Card leen el mismo archivo). El archivo real vive en
+// app/opengraph-image.jpg y app/twitter-image.jpg (convención de Next.js,
+// se aplica automáticamente a /aplicar y sus rutas hijas); esta constante
+// solo se usa donde el código necesita la URL a mano, como el JSON-LD.
+export const OG_IMAGE = {
+  path: "/og.jpg",
+  width: 1200,
+  height: 630,
+  alt: "Azure Bootcamp by LEAD UTP: de principiante a experto, gratuito y 100% virtual.",
 };
 
 export const DATES = {
@@ -22,6 +37,11 @@ export const DATES = {
   classesEnd: "8 de octubre",
   closingDate: "10 de octubre",
   schedule: "Martes y jueves, 7:00 p. m. – 9:00 p. m.",
+  // Mismas fechas en ISO, solo para datos estructurados (JSON-LD), que
+  // necesitan un formato de fecha exacto en vez del texto en español.
+  classesStartISO: "2026-09-01",
+  classesEndISO: "2026-10-08",
+  closingDateISO: "2026-10-10",
 };
 
 // Rutas absolutas con hash: estos links viven en el Navbar/Footer, que se

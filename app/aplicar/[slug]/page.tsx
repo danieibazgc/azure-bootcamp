@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarClock } from "lucide-react";
 import { getSpeakerSlotBySlug, listSpeakerSlots } from "@/lib/speakers";
 import { formatSlotFullDate, formatSlotTimeRange } from "@/lib/format-date";
+import { OG_IMAGE } from "@/lib/content";
 import { SpeakerForm } from "./SpeakerForm";
 
 // Same reasoning as app/aplicar/page.tsx: slot status/title/time can change
@@ -24,12 +25,40 @@ export async function generateMetadata({
   const slot = await getSpeakerSlotBySlug(slug);
 
   if (!slot) {
-    return { title: "Fecha no encontrada — Call for speakers" };
+    return { title: "Fecha no encontrada" };
   }
 
+  const description = `Postula para dictar la sesión "${slot.title}" del Azure Bootcamp by LEAD UTP.`;
+  const canonical = `/aplicar/${slug}`;
+  // og:title/og:description propios de la sesión: al definir "openGraph"
+  // acá, Next.js reemplaza por completo el de app/aplicar/layout.tsx (no
+  // fusiona campos), así que cada fecha muestra su propia tarjeta al
+  // compartirla en vez del texto genérico de la convocatoria. Eso también
+  // borra la imagen que ese layout repite desde OG_IMAGE, así que hay que
+  // repetirla otra vez acá para no compartir esta página sin foto.
+  const ogTitle = `Sesión ${slot.sessionNumber}: ${slot.title} — Azure Bootcamp`;
+  const ogImages = [
+    { url: OG_IMAGE.path, width: OG_IMAGE.width, height: OG_IMAGE.height, alt: OG_IMAGE.alt },
+  ];
+
   return {
-    title: `Aplica como speaker: ${slot.title} — Azure Bootcamp`,
-    description: `Postula para dictar la sesión "${slot.title}" del Azure Bootcamp by LEAD UTP.`,
+    title: `Aplica como speaker: ${slot.title}`,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title: ogTitle,
+      description: slot.brief,
+      url: canonical,
+      images: ogImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: slot.brief,
+      images: ogImages,
+    },
   };
 }
 
@@ -60,9 +89,8 @@ export default async function AplicarSlotPage({
           Aplica como <span className="text-gradient-azure">speaker</span>
         </h1>
         <p className="mt-3 text-base leading-7 text-white/65">
-          Tu experiencia con Azure puede inspirar a la próxima generación de estudiantes.
-          Completa este formulario para confirmar tu disponibilidad como speaker; toma menos de
-          2 minutos.
+          Tu experiencia con Azure puede inspirar a la próxima generación de desarrolladores.
+          Completa este formulario para confirmar tu disponibilidad como speaker.
         </p>
 
         <div className="card-surface mt-6 flex items-start gap-3 rounded-2xl px-5 py-4">

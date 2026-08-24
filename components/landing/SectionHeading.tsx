@@ -24,13 +24,13 @@ export function SectionHeading({
         {title}
       </h2>
       {description ? (
-        <p
+        <div
           className={`mt-4 max-w-2xl text-base leading-7 text-white/70 ${
             align === "center" ? "mx-auto" : ""
           }`}
         >
           {description}
-        </p>
+        </div>
       ) : null}
     </div>
   );

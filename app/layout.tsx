@@ -23,17 +23,29 @@ const title = `${SITE.name} by ${SITE.organizer} — ${SITE.tagline}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title,
-  description: SITE.description,
-  icons: {
-    icon: [{ url: "/favicon.webp", type: "image/webp" }],
+  title: {
+    default: title,
+    template: `%s · ${SITE.name}`,
   },
+  description: SITE.description,
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  // La imagen para "/" no se declara aquí: app/opengraph-image.jpg y
+  // app/twitter-image.jpg (convención de archivos de Next.js) generan esas
+  // etiquetas automáticamente. Ojo: eso solo cubre este layout — en cuanto
+  // un segmento hijo (p. ej. app/aplicar/layout.tsx) define su propio
+  // "openGraph", Next.js reemplaza el objeto completo y esa imagen se
+  // pierde, así que esos segmentos repiten "images" a mano con OG_IMAGE.
   openGraph: {
     title,
     description: SITE.description,
     url: SITE.url,
-    siteName: title,
-    images: [{ url: "/og.jpg", width: 1080, height: 1350 }],
+    siteName: SITE.organizer,
     locale: "es_PE",
     type: "website",
   },
@@ -41,7 +53,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description: SITE.description,
-    images: ["/og.jpg"],
   },
 };
 
