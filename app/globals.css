@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #020c3e;
+  --navy-deep: #010720;
+  --lead-red: #d93340;
+  --lead-crimson: #cb2f4a;
+  --lead-magenta: #a6249d;
+  --violet: #7856ee;
+  --azure: #2f7dff;
+  --azure-light: #00d1ff;
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-lead-red: var(--lead-red);
+  --color-lead-crimson: var(--lead-crimson);
+  --color-lead-magenta: var(--lead-magenta);
+  --color-violet: var(--violet);
+  --color-azure: var(--azure);
+  --color-azure-light: var(--azure-light);
+  --font-sans: var(--font-poppins);
+  --font-display: var(--font-outfit);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Offsets hash-link scrolling (Next.js scrollIntoView + native fragment
+       navigation both read this) so sections don't land under the sticky
+       Navbar. Matches the header's mobile height; bumped for the taller
+       header once the logo grows at `sm`. */
+    scroll-padding-top: 4.5rem;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      scroll-padding-top: 5.5rem;
+    }
+  }
+
+  body {
+    background-color: var(--navy);
+    color: #ffffff;
+  }
+}
+
+@layer utilities {
+  .card-surface {
+    background-color: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    backdrop-filter: blur(20px);
+  }
+
+  .card-surface-strong {
+    background-color: rgb(2 12 62 / 0.55);
+    border: 1px solid rgb(255 255 255 / 0.12);
+    backdrop-filter: blur(24px);
+  }
+
+  .text-gradient-azure {
+    background-image: linear-gradient(
+      90deg,
+      var(--azure-light),
+      var(--azure)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .gradient-cta {
+    background-image: linear-gradient(
+      95deg,
+      var(--lead-red),
+      var(--lead-magenta) 55%,
+      var(--violet)
+    );
+  }
+
+  .glow-violet {
+    box-shadow: 0 0 45px -12px rgb(120 86 238 / 0.65);
+  }
+
+  .glow-azure {
+    box-shadow: 0 0 45px -12px rgb(0 209 255 / 0.5);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
