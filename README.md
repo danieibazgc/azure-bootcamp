@@ -57,8 +57,9 @@ Convocatoria pública para conseguir un ponente por cada una de las 12 sesiones 
 **Administración (vía [Supabase Studio](https://supabase.com/dashboard)):**
 
 - **Cerrar una fecha:** en la tabla `speaker_slots`, cambia su `status` a `closed`. Deja de aceptar postulaciones y la card en `/aplicar` se muestra como "Cerrada" (ya no es un link).
+- **Marcar una fecha con speaker ya confirmado:** cambia su `status` a `assigned` (por ejemplo, cuando el speaker se consiguió fuera del formulario). A diferencia de `closed`, la card queda resaltada en verde como "Speaker confirmado" en vez del gris genérico de "Cerrada", y `/aplicar/[slug]` muestra el mismo aviso en vez del formulario. La fecha sigue visible, solo deja de aceptar postulaciones.
 - **Revisar postulaciones:** tabla `speaker_applications` (nadie más puede leerla; ni siquiera con la clave pública se puede hacer `select`, solo `insert`). Las fotos quedan en el bucket público `speaker-photos`, referenciadas por `photo_path`.
-- **Reabrir/editar fechas:** actualiza `title`, `starts_at`, `ends_at` o `status` directamente en `speaker_slots`. Si cambias el `slug`, recuerda actualizar el enlace del footer si lo compartiste.
+- **Reabrir/editar fechas:** actualiza `title`, `starts_at`, `ends_at` o `status` (`open` | `assigned` | `closed`) directamente en `speaker_slots`. Si cambias el `slug`, recuerda actualizar el enlace del footer si lo compartiste.
 
 ## Scripts
 

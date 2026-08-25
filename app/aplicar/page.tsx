@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, CalendarClock, Lock } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarClock, CheckCircle2, Lock } from "lucide-react";
 import { listSpeakerSlots } from "@/lib/speakers";
 import { formatSlotDateParts, formatSlotTimeRange } from "@/lib/format-date";
 import { SectionHeading } from "@/components/landing/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { DATES, SITE } from "@/lib/content";
 
-// Slot status is toggled manually in Supabase (open/closed), so this page
-// needs to pick up changes without a redeploy — revalidate periodically
-// instead of freezing the build-time snapshot forever.
+// Slot status is toggled manually in Supabase (open/assigned/closed), so
+// this page needs to pick up changes without a redeploy — revalidate
+// periodically instead of freezing the build-time snapshot forever.
 export const revalidate = 60;
 
 // Lighter than the home page's Course + Event pair: just enough for search
@@ -101,6 +101,7 @@ export default async function AplicarPage() {
             );
             const timeRange = formatSlotTimeRange(slot.startsAt, slot.endsAt);
             const isOpen = slot.status === "open";
+            const isAssigned = slot.status === "assigned";
 
             const cardContent = (
               <>
@@ -112,11 +113,18 @@ export default async function AplicarPage() {
                     className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${
                       isOpen
                         ? "bg-azure/15 text-azure-light"
-                        : "bg-white/10 text-white/50"
+                        : isAssigned
+                          ? "bg-emerald-500/15 text-emerald-300"
+                          : "bg-white/10 text-white/50"
                     }`}
                   >
                     {isOpen ? (
                       "Disponible"
+                    ) : isAssigned ? (
+                      <>
+                        <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+                        Speaker confirmado
+                      </>
                     ) : (
                       <>
                         <Lock className="h-3 w-3" aria-hidden="true" />
@@ -152,6 +160,11 @@ export default async function AplicarPage() {
                       Aplicar aquí
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </span>
+                  ) : isAssigned ? (
+                    <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-300">
+                      <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                      Speaker asignado
+                    </span>
                   ) : (
                     <span className="inline-flex w-full items-center justify-center rounded-full border border-white/10 px-4 py-2.5 text-sm font-semibold text-white/40">
                       Cerrada
@@ -160,6 +173,17 @@ export default async function AplicarPage() {
                 </div>
               </>
             );
+
+            if (isAssigned) {
+              return (
+                <div
+                  key={slot.id}
+                  className="relative flex flex-col rounded-2xl border border-emerald-400/25 bg-emerald-500/[0.06] p-5 sm:p-6"
+                >
+                  {cardContent}
+                </div>
+              );
+            }
 
             if (!isOpen) {
               return (

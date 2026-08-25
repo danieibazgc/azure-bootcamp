@@ -1,7 +1,10 @@
 import "server-only";
 import { supabase, SPEAKER_PHOTOS_BUCKET } from "@/lib/supabase";
 
-export type SpeakerSlotStatus = "open" | "closed";
+// "assigned" es distinto de "closed": significa que ya se confirmó un speaker
+// para esa sesión (por fuera del formulario), no que la convocatoria se
+// cerró por otro motivo. Mantiene la fecha visible pero bloqueada.
+export type SpeakerSlotStatus = "open" | "closed" | "assigned";
 
 export type SpeakerSlot = {
   id: string;

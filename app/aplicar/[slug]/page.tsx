@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CalendarClock } from "lucide-react";
+import { ArrowLeft, CalendarClock, CheckCircle2, Lock } from "lucide-react";
 import { getSpeakerSlotBySlug, listSpeakerSlots } from "@/lib/speakers";
 import { formatSlotFullDate, formatSlotTimeRange } from "@/lib/format-date";
 import { OG_IMAGE } from "@/lib/content";
@@ -74,6 +74,9 @@ export default async function AplicarSlotPage({
     notFound();
   }
 
+  const isOpen = slot.status === "open";
+  const isAssigned = slot.status === "assigned";
+
   return (
     <section className="relative overflow-hidden pb-16 pt-12 sm:pb-20 sm:pt-20 lg:pb-24">
       <div className="mx-auto max-w-3xl px-6">
@@ -107,7 +110,34 @@ export default async function AplicarSlotPage({
         </div>
 
         <div className="mt-8">
-          <SpeakerForm slot={slot} />
+          {isOpen ? (
+            <SpeakerForm slot={slot} />
+          ) : (
+            <div
+              className={`flex flex-col items-center gap-4 rounded-2xl p-10 text-center ${
+                isAssigned
+                  ? "border border-emerald-400/25 bg-emerald-500/[0.06]"
+                  : "card-surface"
+              }`}
+            >
+              {isAssigned ? (
+                <CheckCircle2 className="h-10 w-10 text-emerald-300" aria-hidden="true" />
+              ) : (
+                <Lock className="h-10 w-10 text-white/40" aria-hidden="true" />
+              )}
+              <p className="max-w-md text-base leading-7 text-white/80">
+                {isAssigned
+                  ? "Ya contamos con un speaker confirmado para esta sesión. ¡Gracias por tu interés! Puedes revisar las demás fechas disponibles."
+                  : "Esta fecha ya no acepta postulaciones. Revisa las demás fechas disponibles."}
+              </p>
+              <Link
+                href="/aplicar"
+                className="mt-2 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/40 hover:bg-white/10"
+              >
+                Ver otras fechas
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>
