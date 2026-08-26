@@ -10,3 +10,7 @@ export const ALLOWED_PHOTO_TYPES = [
   "image/png",
   "image/webp",
 ] as const;
+
+// Evita descripciones de una línea ("hablaré de Azure") que no le dan al
+// comité nada con qué evaluar la charla.
+export const MIN_TALK_DESCRIPTION_LENGTH = 350;

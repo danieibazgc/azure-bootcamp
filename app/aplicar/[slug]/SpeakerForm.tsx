@@ -4,6 +4,7 @@ import { useActionState, useId, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, CheckCircle2, ImagePlus } from "lucide-react";
 import { submitSpeakerApplication, type SpeakerFormState } from "../actions";
+import { MIN_TALK_DESCRIPTION_LENGTH } from "@/lib/speaker-content";
 import type { SpeakerSlot } from "@/lib/speakers";
 
 const initialState: SpeakerFormState = { status: "idle" };
@@ -39,6 +40,7 @@ export function SpeakerForm({ slot }: { slot: SpeakerSlot }) {
     initialState
   );
   const [photoName, setPhotoName] = useState<string | null>(null);
+  const [talkDescriptionLength, setTalkDescriptionLength] = useState(0);
   const photoInputId = useId();
 
   if (state.status === "success") {
@@ -137,10 +139,21 @@ export function SpeakerForm({ slot }: { slot: SpeakerSlot }) {
         <textarea
           name="talkDescription"
           required
-          rows={4}
+          minLength={MIN_TALK_DESCRIPTION_LENGTH}
+          rows={5}
           placeholder="Cuenta de qué va tu charla, qué aprendizajes compartirás y quién es el público ideal..."
           className={inputClass}
+          onChange={(event) => setTalkDescriptionLength(event.target.value.length)}
         />
+        <span
+          className={`text-xs ${
+            talkDescriptionLength >= MIN_TALK_DESCRIPTION_LENGTH
+              ? "text-azure-light"
+              : "text-white/40"
+          }`}
+        >
+          {talkDescriptionLength} / {MIN_TALK_DESCRIPTION_LENGTH} caracteres mínimo
+        </span>
       </Field>
 
       <div className="flex flex-col gap-2">
@@ -161,7 +174,7 @@ export function SpeakerForm({ slot }: { slot: SpeakerSlot }) {
 
       <div className="flex flex-col gap-2">
         <label htmlFor={photoInputId} className="text-sm font-medium text-white/80">
-          Foto de perfil
+          Foto de perfil <span className="text-lead-red">*</span>
         </label>
         <label
           htmlFor={photoInputId}
@@ -174,6 +187,7 @@ export function SpeakerForm({ slot }: { slot: SpeakerSlot }) {
           id={photoInputId}
           type="file"
           name="photo"
+          required
           accept="image/jpeg,image/png,image/webp"
           className="sr-only"
           onChange={(event) => setPhotoName(event.target.files?.[0]?.name ?? null)}

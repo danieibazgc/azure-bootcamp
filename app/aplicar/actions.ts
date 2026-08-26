@@ -5,7 +5,11 @@ import {
   getSpeakerSlotBySlug,
   uploadSpeakerPhoto,
 } from "@/lib/speakers";
-import { ALLOWED_PHOTO_TYPES, MAX_PHOTO_SIZE_BYTES } from "@/lib/speaker-content";
+import {
+  ALLOWED_PHOTO_TYPES,
+  MAX_PHOTO_SIZE_BYTES,
+  MIN_TALK_DESCRIPTION_LENGTH,
+} from "@/lib/speaker-content";
 
 export type SpeakerFormState = {
   status: "idle" | "success" | "error";
@@ -57,16 +61,25 @@ export async function submitSpeakerApplication(
     return { status: "error", message: "Ingresa un correo electrónico válido." };
   }
 
-  if (photo) {
-    if (photo.size > MAX_PHOTO_SIZE_BYTES) {
-      return { status: "error", message: "La foto no debe superar los 5 MB." };
-    }
-    if (!ALLOWED_PHOTO_TYPES.includes(photo.type as (typeof ALLOWED_PHOTO_TYPES)[number])) {
-      return {
-        status: "error",
-        message: "La foto debe ser JPG, PNG o WEBP.",
-      };
-    }
+  if (talkDescription.length < MIN_TALK_DESCRIPTION_LENGTH) {
+    return {
+      status: "error",
+      message: `La descripción breve debe tener al menos ${MIN_TALK_DESCRIPTION_LENGTH} caracteres (tiene ${talkDescription.length}).`,
+    };
+  }
+
+  if (!photo) {
+    return { status: "error", message: "La foto de perfil es obligatoria." };
+  }
+
+  if (photo.size > MAX_PHOTO_SIZE_BYTES) {
+    return { status: "error", message: "La foto no debe superar los 5 MB." };
+  }
+  if (!ALLOWED_PHOTO_TYPES.includes(photo.type as (typeof ALLOWED_PHOTO_TYPES)[number])) {
+    return {
+      status: "error",
+      message: "La foto debe ser JPG, PNG o WEBP.",
+    };
   }
 
   let slot;
@@ -98,16 +111,14 @@ export async function submitSpeakerApplication(
     };
   }
 
-  let photoPath: string | null = null;
-  if (photo) {
-    try {
-      photoPath = await uploadSpeakerPhoto(photo, slot.slug);
-    } catch {
-      return {
-        status: "error",
-        message: "No pudimos subir tu foto. Intenta de nuevo en unos segundos.",
-      };
-    }
+  let photoPath: string;
+  try {
+    photoPath = await uploadSpeakerPhoto(photo, slot.slug);
+  } catch {
+    return {
+      status: "error",
+      message: "No pudimos subir tu foto. Intenta de nuevo en unos segundos.",
+    };
   }
 
   const result = await createSpeakerApplication({
