@@ -17,10 +17,22 @@ export type SpeakerFormState = {
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Acepta linkedin.com/in/..., /company/... y subdominios de país
+// (ar.linkedin.com), con o sin "www.". SpeakerForm.tsx ya antepone
+// "https://" si el usuario pega la URL sin protocolo, pero se valida de
+// nuevo acá porque el cliente no es una fuente confiable.
+const LINKEDIN_PATTERN = /^https?:\/\/([a-z0-9-]+\.)?linkedin\.com\/.+/i;
 
 function readText(formData: FormData, field: string): string {
   const value = formData.get(field);
   return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizeLinkedinUrl(value: string): string {
+  if (!value || /^https?:\/\//i.test(value)) {
+    return value;
+  }
+  return `https://${value}`;
 }
 
 export async function submitSpeakerApplication(
@@ -33,7 +45,7 @@ export async function submitSpeakerApplication(
   const role = readText(formData, "role");
   const company = readText(formData, "company");
   const email = readText(formData, "email").toLowerCase();
-  const linkedin = readText(formData, "linkedin");
+  const linkedin = normalizeLinkedinUrl(readText(formData, "linkedin"));
   const talkTitle = readText(formData, "talkTitle");
   const talkDescription = readText(formData, "talkDescription");
   const tools = formData.getAll("tools").filter((v): v is string => typeof v === "string");
@@ -47,6 +59,7 @@ export async function submitSpeakerApplication(
     !role ||
     !company ||
     !email ||
+    !linkedin ||
     !talkTitle ||
     !talkDescription ||
     tools.length === 0
@@ -61,10 +74,18 @@ export async function submitSpeakerApplication(
     return { status: "error", message: "Ingresa un correo electrónico válido." };
   }
 
+  if (!LINKEDIN_PATTERN.test(linkedin)) {
+    return {
+      status: "error",
+      message:
+        "Ingresa la URL de tu perfil de LinkedIn (ej. https://www.linkedin.com/in/tu-usuario).",
+    };
+  }
+
   if (talkDescription.length < MIN_TALK_DESCRIPTION_LENGTH) {
     return {
       status: "error",
-      message: `La descripción breve debe tener al menos ${MIN_TALK_DESCRIPTION_LENGTH} caracteres (tiene ${talkDescription.length}).`,
+      message: `La descripción debe tener al menos ${MIN_TALK_DESCRIPTION_LENGTH} caracteres (tiene ${talkDescription.length}).`,
     };
   }
 
@@ -128,7 +149,7 @@ export async function submitSpeakerApplication(
     role,
     company,
     email,
-    linkedin: linkedin || null,
+    linkedin,
     talkTitle,
     talkDescription,
     tools,
