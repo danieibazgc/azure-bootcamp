@@ -54,9 +54,27 @@ export const NAV_LINKS = [
   { href: "/#malla", label: "Malla" },
   { href: "/#clausura", label: "Clausura" },
   { href: "/#faq", label: "FAQ" },
+  { href: "/badge", label: "Badge" },
 ];
 
 export const CALL_FOR_SPEAKERS_URL = "/aplicar";
+
+// Borrador del post de LinkedIn que abre el botón "Compartir" en /badge.
+// La foto no viaja por la URL: LinkedIn no admite adjuntar imagen por query
+// string, así que el generador descarga el PNG para que el usuario lo suba.
+export const BADGE_LINKEDIN_TEXT = `¡Soy parte del Azure Bootcamp 2026 de LEAD UTP!
+
+Postulé, y hoy recibí la confirmación: fui seleccionado/a para ser parte de esta experiencia intensiva donde vamos a construir, romper y volver a levantar cosas sobre Microsoft Azure ☁️
+
+Lo que más me emociona no es solo aprender los servicios, sino hacerlo junto a una comunidad que se toma en serio el aprender haciendo: mentores, proyectos reales y gente con muchas ganas de crecer en cloud.
+
+Nos vemos en el bootcamp. Vamos con todo 💪
+
+Gracias a LEAD UTP por abrir estos espacios para los que queremos dar el siguiente paso en tecnología.
+
+#AzureBootcamp #LEADUTP #Azure #Cloud #MicrosoftAzure #ComunidadTech #UTP
+
+${SITE.url}`;
 
 export const FOOTER_LINKS = [
   ...NAV_LINKS,

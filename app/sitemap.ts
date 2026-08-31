@@ -19,6 +19,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 0.8,
     },
+    {
+      url: `${SITE.url}/badge`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
     ...slots.map((slot) => ({
       url: `${SITE.url}/aplicar/${slot.slug}`,
       lastModified: now,
