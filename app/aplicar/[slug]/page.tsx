@@ -28,7 +28,10 @@ export async function generateMetadata({
     return { title: "Fecha no encontrada" };
   }
 
-  const description = `Postula para dictar la sesión "${slot.title}" del Azure Bootcamp by LEAD UTP.`;
+  const description =
+    slot.status === "open"
+      ? `Postula para dictar la sesión "${slot.title}" del Azure Bootcamp by LEAD UTP.`
+      : `La convocatoria de speakers ya cerró. La sesión "${slot.title}" tiene ponente confirmado.`;
   const canonical = `/aplicar/${slug}`;
   // og:title/og:description propios de la sesión: al definir "openGraph"
   // acá, Next.js reemplaza por completo el de app/aplicar/layout.tsx (no
@@ -42,7 +45,10 @@ export async function generateMetadata({
   ];
 
   return {
-    title: `Aplica como speaker: ${slot.title}`,
+    title:
+      slot.status === "open"
+        ? `Aplica como speaker: ${slot.title}`
+        : `Sesión ${slot.sessionNumber}: ${slot.title}`,
     description,
     alternates: {
       canonical,
@@ -88,13 +94,27 @@ export default async function AplicarSlotPage({
           Volver a las fechas
         </Link>
 
-        <h1 className="mt-6 font-display text-3xl font-bold text-white sm:text-4xl">
-          Aplica como <span className="text-gradient-azure">speaker</span>
-        </h1>
-        <p className="mt-3 text-base leading-7 text-white/65">
-          Tu experiencia con Azure puede inspirar a la próxima generación de desarrolladores.
-          Completa este formulario para confirmar tu disponibilidad como speaker.
-        </p>
+        {isOpen ? (
+          <>
+            <h1 className="mt-6 font-display text-3xl font-bold text-white sm:text-4xl">
+              Aplica como <span className="text-gradient-azure">speaker</span>
+            </h1>
+            <p className="mt-3 text-base leading-7 text-white/65">
+              Tu experiencia con Azure puede inspirar a la próxima generación de desarrolladores.
+              Completa este formulario para confirmar tu disponibilidad como speaker.
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="mt-6 font-display text-3xl font-bold text-white sm:text-4xl">
+              Convocatoria <span className="text-gradient-azure">cerrada</span>
+            </h1>
+            <p className="mt-3 text-base leading-7 text-white/65">
+              Ya cubrimos las 12 sesiones del Azure Bootcamp. Esta fecha tiene un speaker
+              confirmado.
+            </p>
+          </>
+        )}
 
         <div className="card-surface mt-6 flex items-start gap-3 rounded-2xl px-5 py-4">
           <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-azure-light" aria-hidden="true" />
@@ -127,14 +147,14 @@ export default async function AplicarSlotPage({
               )}
               <p className="max-w-md text-base leading-7 text-white/80">
                 {isAssigned
-                  ? "Ya contamos con un speaker confirmado para esta sesión. ¡Gracias por tu interés! Puedes revisar las demás fechas disponibles."
-                  : "Esta fecha ya no acepta postulaciones. Revisa las demás fechas disponibles."}
+                  ? "Ya contamos con un speaker confirmado para esta sesión. La convocatoria de speakers ya cerró."
+                  : "Esta fecha ya no acepta postulaciones. La convocatoria de speakers ya cerró."}
               </p>
               <Link
                 href="/aplicar"
                 className="mt-2 inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:border-white/40 hover:bg-white/10"
               >
-                Ver otras fechas
+                Ver las 12 sesiones
               </Link>
             </div>
           )}

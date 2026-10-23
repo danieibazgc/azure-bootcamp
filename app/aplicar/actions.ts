@@ -120,7 +120,7 @@ export async function submitSpeakerApplication(
   if (slot.status !== "open") {
     return {
       status: "error",
-      message: "Esta fecha ya no acepta postulaciones. Elige otra en /aplicar.",
+      message: "Esta fecha ya no acepta postulaciones. La convocatoria de speakers ya cerró.",
     };
   }
 
