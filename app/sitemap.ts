@@ -1,10 +1,21 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/content";
-import { listSpeakerSlots } from "@/lib/speakers";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const slots = await listSpeakerSlots();
   const now = new Date();
+  let slotUrls: MetadataRoute.Sitemap = [];
+  try {
+    const { listSpeakerSlots } = await import("@/lib/speakers");
+    const slots = await listSpeakerSlots();
+    slotUrls = slots.map((slot) => ({
+      url: `${SITE.url}/aplicar/${slot.slug}`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 0.6,
+    }));
+  } catch {
+    slotUrls = [];
+  }
 
   return [
     {
@@ -31,11 +42,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.7,
     },
-    ...slots.map((slot) => ({
-      url: `${SITE.url}/aplicar/${slot.slug}`,
-      lastModified: now,
-      changeFrequency: "daily" as const,
-      priority: 0.6,
-    })),
+    ...slotUrls,
   ];
 }
