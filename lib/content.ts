@@ -78,6 +78,7 @@ ${SITE.url}`;
 
 export const FOOTER_LINKS = [
   ...NAV_LINKS,
+  { href: "/podio", label: "Top 20" },
   { href: CALL_FOR_SPEAKERS_URL, label: "Call for speakers" },
 ];
 
@@ -346,7 +347,7 @@ export const FAQ: FaqItem[] = [
   {
     question: "¿Puedo postular como speaker?",
     answer:
-      "Sí. Buscamos un ponente distinto para cada una de las 12 sesiones del bootcamp. La postulación es gratuita y toma menos de dos minutos.",
-    cta: { label: "Ver convocatoria de speakers", href: CALL_FOR_SPEAKERS_URL },
+      "No. La convocatoria ya cerró; las 12 sesiones tienen ponente confirmado.",
+    cta: { label: "Ver las 12 sesiones", href: CALL_FOR_SPEAKERS_URL },
   },
 ];

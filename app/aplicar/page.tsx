@@ -4,7 +4,7 @@ import { listSpeakerSlots } from "@/lib/speakers";
 import { formatSlotDateParts, formatSlotTimeRange } from "@/lib/format-date";
 import { SectionHeading } from "@/components/landing/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
-import { DATES, SITE } from "@/lib/content";
+import { SITE } from "@/lib/content";
 
 // Slot status is toggled manually in Supabase (open/assigned/closed), so
 // this page needs to pick up changes without a redeploy — revalidate
@@ -18,7 +18,7 @@ const jsonLd = {
   "@type": "CollectionPage",
   name: "Call for speakers: Azure Bootcamp",
   description:
-    "Postula como speaker para una de las 12 sesiones del Azure Bootcamp by LEAD UTP.",
+    "La convocatoria de speakers del Azure Bootcamp by LEAD UTP ya cerró. Las 12 sesiones tienen ponente confirmado.",
   url: `${SITE.url}/aplicar`,
   isPartOf: {
     "@type": "Course",
@@ -45,49 +45,17 @@ export default async function AplicarPage() {
         <div className="mt-8">
           <SectionHeading
             align="left"
-            eyebrow="Convocatoria abierta"
+            eyebrow="Convocatoria cerrada"
             title="Call for speakers: Azure Bootcamp"
             description={
               <>
-                <p>¿Trabajas con Microsoft Azure y quieres compartir tu experiencia?</p>
-                <p className="mt-3">
-                  Buscamos profesionales con{" "}
-                  <strong className="font-semibold text-white">
-                    experiencia real en Azure
-                  </strong>{" "}
-                  para liderar una sesión del Azure Bootcamp y ayudar a estudiantes de
-                  últimos ciclos y egresados recientes a llevar la teoría a la práctica.
+                <p>
+                  Ya cubrimos las 12 sesiones del Azure Bootcamp. Gracias a quienes
+                  postularon y a quienes compartieron la convocatoria.
                 </p>
-
-                <ul className="mt-4 flex flex-col gap-1.5">
-                  <li>
-                    🎤{" "}
-                    <strong className="font-semibold text-white">
-                      Tu participación:
-                    </strong>{" "}
-                    una sesión virtual de 2 horas
-                  </li>
-                  <li>
-                    🧠 <strong className="font-semibold text-white">1 hora:</strong>{" "}
-                    conceptos y experiencia aplicada
-                  </li>
-                  <li>
-                    💻 <strong className="font-semibold text-white">1 hora:</strong>{" "}
-                    laboratorio guiado en vivo
-                  </li>
-                  <li>
-                    📅{" "}
-                    <strong className="font-semibold text-white">12 sesiones:</strong>{" "}
-                    del {DATES.classesStart} al {DATES.classesEnd} de 2026
-                  </li>
-                </ul>
-
-                <p className="mt-4">
-                  Puedes postular a{" "}
-                  <strong className="font-semibold text-white">
-                    una o más sesiones
-                  </strong>
-                  , según tu experiencia y disponibilidad.
+                <p className="mt-3">
+                  Cada fecha ya tiene un speaker confirmado. Si enviaste una postulación,
+                  te contactaremos solo si fuiste seleccionado.
                 </p>
               </>
             }

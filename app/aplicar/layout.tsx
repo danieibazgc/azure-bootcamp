@@ -4,7 +4,7 @@ import { SITE, OG_IMAGE } from "@/lib/content";
 
 const ogTitle = `Call for speakers — ${SITE.name} by ${SITE.organizer}`;
 const description =
-  "Postula como speaker para una de las 12 sesiones del Azure Bootcamp by LEAD UTP. Comparte tu experiencia con la próxima generación de builders.";
+  "La convocatoria de speakers del Azure Bootcamp ya cerró. Las 12 sesiones tienen ponente confirmado.";
 
 // Next.js resolves app/opengraph-image.jpg into the root layout's own
 // openGraph object; defining a new openGraph object here (title/description
